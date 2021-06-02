@@ -1,0 +1,43 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "bee7938e-72f0-4ead-a098-ecc79908a99d"
+  },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "RNgLogger": {
+      "projectType": "library",
+      "root": "projects/rng-logger",
+      "sourceRoot": "projects/rng-logger/src",
+      "prefix": "rng",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/rng-logger/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/rng-logger/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/rng-logger/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/rng-logger/src/test.ts",
+            "tsConfig": "projects/rng-logger/tsconfig.spec.json",
+            "karmaConfig": "projects/rng-logger/karma.conf.js",
+            "sourceMap": true
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "RNgLogger"
+}

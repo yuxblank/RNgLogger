@@ -1,7 +1,7 @@
 import {APP_INITIALIZER, getPlatform, Injector, PLATFORM_INITIALIZER, StaticProvider} from "@angular/core";
 import {DEFAULT_OPTIONS, Logger, LoggerOptions, LogLevel, LogStreamHandler, RNG_LOGGER_OPTS} from "./rng-logger-api";
 import {ReactiveLogStreamHandler} from "./reactive-log-stream-handler";
-import { RngLogger } from "./rng-logger";
+import {RngLogger} from "./rng-logger";
 
 export const RNG_LOGGER_PROVIDERS: StaticProvider[] = [
   {provide: LogStreamHandler, useClass: ReactiveLogStreamHandler, deps: [RNG_LOGGER_OPTS]},
@@ -18,14 +18,17 @@ export function RNgPlatformLogger(options: LoggerOptions = DEFAULT_OPTIONS): Sta
 }
 
 
-export function RNgLoggerFactory(injector: Injector) : Logger {
+export function RNgLoggerFactory(injector: Injector): Logger {
   try {
-     return new RngLogger(injector.get(LogStreamHandler));
-  } catch {
-    return NOP_LOGGER;
+    return new RngLogger(injector.get(LogStreamHandler));
+  } catch(e) {
+    let loggerOptions = injector.get(RNG_LOGGER_OPTS);
+    if (loggerOptions.nonResolvedStrategy === "NOP") {
+      return NOP_LOGGER;
+    }
+    throw e;
   }
 }
-
 
 export interface NOPLogger extends Logger {
   isNop: boolean;
@@ -61,8 +64,8 @@ export function LoggerFactory(injector?: Injector): Logger | RngLogger {
   }
 }
 
-function logLevelAsLcString(level: LogLevel):string{
-  switch (level){
+function logLevelAsLcString(level: LogLevel): string {
+  switch (level) {
     case LogLevel.INFO: {
       return "info";
     }
@@ -85,17 +88,26 @@ function logLevelAsLcString(level: LogLevel):string{
 }
 
 
-export const PLATFORM_CONSOLE_LOGGER: StaticProvider = {provide: PLATFORM_INITIALIZER, multi: true, useFactory: browserLoggerFactory, deps:[LogStreamHandler]};
-export const APP_CONSOLE_LOGGER: StaticProvider = {provide: APP_INITIALIZER,multi:true, useFactory: browserLoggerFactory, deps:[LogStreamHandler]};
+export const PLATFORM_CONSOLE_LOGGER: StaticProvider = {
+  provide: PLATFORM_INITIALIZER,
+  multi: true,
+  useFactory: browserLoggerFactory,
+  deps: [LogStreamHandler]
+};
+export const APP_CONSOLE_LOGGER: StaticProvider = {
+  provide: APP_INITIALIZER,
+  multi: true,
+  useFactory: browserLoggerFactory,
+  deps: [LogStreamHandler]
+};
 
 export function browserLoggerFactory(handler: LogStreamHandler) {
   return () => {
     handler.last$()
       .subscribe(next => {
-          // @ts-ignore
+        // @ts-ignore
         console[logLevelAsLcString(next.level)](next.message, ...next.options)
       })
   }
-
 }
 

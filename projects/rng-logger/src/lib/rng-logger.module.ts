@@ -1,11 +1,11 @@
-import {NgModule} from '@angular/core';
-import {Logger, LogStreamHandler} from "./rng-logger-api";
+import {Injector, NgModule} from '@angular/core';
+import {Logger} from "./rng-logger-api";
 import {RNgLoggerFactory} from "./rng-logger-providers";
 
 
 @NgModule({
   providers: [
-    {provide: Logger, useFactory: RNgLoggerFactory, deps: [LogStreamHandler]},
+    {provide: Logger, useFactory: RNgLoggerFactory, deps: [Injector]},
   ]
 })
 export class RNgLoggerModule {}

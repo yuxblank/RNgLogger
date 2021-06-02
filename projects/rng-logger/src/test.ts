@@ -20,7 +20,8 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(
     [...RNgPlatformLogger({
       maxBuffer: 10,
-      level: LogLevel.DEBUG
+      level: LogLevel.DEBUG,
+      nonResolvedStrategy: "NOP"
     }), PLATFORM_CONSOLE_LOGGER]
   )
 );

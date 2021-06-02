@@ -8,23 +8,23 @@ export class RngLogger extends Logger{
     super();
   }
 
-  debug(message: string, ...options: any[]): void {
+  debug(message: string|any, ...options: any[]): void {
     this.streamHandler.put(RngLogger.createEvent(LogLevel.DEBUG, message, options))
   }
 
-  error(message: string, ...options: any[]): void {
+  error(message: string|any, ...options: any[]): void {
     this.streamHandler.put(RngLogger.createEvent(LogLevel.ERROR, message, options))
   }
 
-  info(message: string, ...options: any[]): void {
+  info(message: string|any, ...options: any[]): void {
     this.streamHandler.put(RngLogger.createEvent(LogLevel.INFO, message, options))
   }
 
-  trace(message: string, ...options: any[]): void {
+  trace(message: string|any, ...options: any[]): void {
     this.streamHandler.put(RngLogger.createEvent(LogLevel.TRACE, message, options))
   }
 
-  warn(message: string, ...options: any[]): void {
+  warn(message: string|any, ...options: any[]): void {
     this.streamHandler.put(RngLogger.createEvent(LogLevel.WARN, message, options))
   }
 

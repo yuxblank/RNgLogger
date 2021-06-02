@@ -9,7 +9,9 @@
     "test": "ng test",
     "test-coverage": "ng test --code-coverage"
   },
-  "private": true,
+  "author": "Yuri Blanc",
+  "description": "Angular Reactive Logging framework",
+  "private": false,
   "dependencies": {
     "@angular/animations": "~12.0.2",
     "@angular/common": "~12.0.2",

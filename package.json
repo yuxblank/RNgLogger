@@ -4,11 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prepare": "cp README.md dist/rng-logger",
     "build": "ng build RNgLogger",
     "watch": "ng build RNgLogger --watch",
     "test": "ng test --browsers=ChromeHeadless",
     "test-coverage": "ng test --code-coverage --browsers=ChromeHeadless",
-    "publish-npm": "cd dist/rng-logger && npm publish"
+    "publish-npm": "npm run prepare && cd dist/rng-logger && npm publish"
   },
   "repository": {
     "type": "git",

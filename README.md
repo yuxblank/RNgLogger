@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/yuxblank/RNgLogger/badge.svg?branch=master)](https://coveralls.io/github/yuxblank/RNgLogger?branch=master)
+
 # RNgLogger
 The Reactive Angular Logging framework you wanted!
 

@@ -26,6 +26,11 @@ From `console.info("message")` To  `LoggerFactory().info("message")`
 
 `RNgLogger` is an Angular platform tool, to use it you must register the required providers at platform level.
 
+NPM install:
+
+`npm i rng-logger`
+
+
 ### Register the platform Logger
 
 _In your Angular application entry (usually `main.ts` file), add the `RNgPlatformLogger` factory call._
@@ -69,11 +74,14 @@ import {LogLevel, PLATFORM_CONSOLE_LOGGER, RNgPlatformLogger} from "rng-logger";
 
 platformBrowserDynamic([
     ...RNgPlatformLogger(),
-    PLATFORM_CONSOLE_LOGGER // PLATORM CONSOLLE LOGGER 
+    PLATFORM_CONSOLE_LOGGER // PLATORM CONSOLE LOGGER 
   ]
 ).bootstrapModule(AppModule)
   .catch(err => console.error(err));
 ```
+
+`PLATFORM_CONSOLE_LOGGER` uses window.console to output the log stream.
+
 
 You can supply multiple Handlers via `PLATFORM_INITIALIZER` (by registering at platform creation) or `APP_INITIALIZER` (in App modules).
 Also, creating an instance of the handler in the module instantiation is possible, not recommended tough.

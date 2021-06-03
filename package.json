@@ -8,7 +8,7 @@
     "watch": "ng build RNgLogger --watch",
     "test": "ng test --browsers=ChromeHeadless",
     "test-coverage": "ng test --code-coverage --browsers=ChromeHeadless",
-    "publish": "cd dist/rng-logger && npm publish"
+    "publish-npm": "cd dist/rng-logger && npm publish"
   },
   "repository": {
     "type": "git",

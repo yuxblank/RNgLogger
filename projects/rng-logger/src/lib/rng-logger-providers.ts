@@ -22,11 +22,17 @@ export function RNgLoggerFactory(injector: Injector): Logger {
   try {
     return new RngLogger(injector.get(LogStreamHandler));
   } catch(e) {
-    let loggerOptions = injector.get(RNG_LOGGER_OPTS);
-    if (loggerOptions.nonResolvedStrategy === "NOP") {
+    let opts;
+    try {
+      opts = injector.get(RNG_LOGGER_OPTS);
+    }
+    catch {
       return NOP_LOGGER;
     }
-    throw e;
+    if (opts.nonResolvedStrategy ===  "NOP"){
+      return NOP_LOGGER;
+    }
+    throw "Logger cannot be resolved";
   }
 }
 
@@ -51,17 +57,9 @@ export function LoggerFactory(injector?: Injector): Logger | RngLogger {
     if (!platform) {
       return NOP_LOGGER;
     }
-    try {
-      return platform.injector.get(Logger);
-    } catch {
-      return NOP_LOGGER;
-    }
+    return RNgLoggerFactory(platform.injector)
   }
-  try {
-    return injector.get(Logger);
-  } catch {
-    return NOP_LOGGER;
-  }
+  return RNgLoggerFactory(injector);
 }
 
 function logLevelAsLcString(level: LogLevel): string {

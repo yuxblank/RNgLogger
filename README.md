@@ -1,15 +1,22 @@
 # RNgLogger
 The Reactive Angular Logging framework you wanted!
 
-`RNgLogger` is a logging API that abstract the log stream from the actual log handler, allowing supporting multiple log target within your Angular APP in any Platform target.
+`RNgLogger` is a logging API that abstract the log stream from the actual log handler, allowing supporting multiple log targets at the same time within your Angular Application.
+
+Easily switch between platforms (browser, server) with different logging handlers using the same API.
+
+Straightforward replace for console usage!
+
+From `console.info("message")` To  `LoggerFactory().info("message")`
 
 ## Features
 - Simple logger interface as a reduced set of window.console
 - Opt-in replacement for your un-wanted console.log statements
 - Configurable level filtering and Log retention
-- RX.JS based log stream handler allow multiple targets (console, FileSystem, Http Endpoints etc...)
-- Angular Platform Logger allow to use the logger interface by Injection and via LoggerFactory() to avoid change your code with additional dependencies.
-- No operation Logger (NOP) is provided by default when the logger it's not provided or cannot be resolved. (can be changed to throw error)
+- RX.JS based log stream handler allow multiple targets at the same time (console, FileSystem, Http Endpoints etc...)
+- Angular Platform Logger allow to use the logger interface by Injection and via LoggerFactory() as most of the Logging frameworks
+- No operation Logger (NOP) is provided by default when the logger it's not provided or cannot be resolved. (can be configured to throw error)
+- Logger can be used anywhere, libraries included, and when the application does not register it's just a NOP implementation
 - A built-in window.console handler for Platform browser apps!
 
 
@@ -19,7 +26,7 @@ The Reactive Angular Logging framework you wanted!
 
 ### Register the platform Logger
 
-In your Angular application entry (usually main.ts file), add the RNgPlatformLogger factory call.
+_In your Angular application entry (usually `main.ts` file), add the `RNgPlatformLogger` factory call._
 ```typescript
 import {LogLevel, PLATFORM_CONSOLE_LOGGER, RNgPlatformLogger} from "rng-logger";
 
@@ -36,7 +43,7 @@ platformBrowserDynamic(
 
 `RNgPlatformLogger` is a factory that returns the providers required for the platform, and accept a configuration if needed.
 
-To Change the default configuration, you can apply like this:
+_To Change the default configuration, you can apply like this:_
 
 ```typescript
 import {LogLevel, PLATFORM_CONSOLE_LOGGER, RNgPlatformLogger} from "rng-logger";
@@ -53,7 +60,7 @@ RNgPlatformLogger({
 
 A handler is an object that subscribe to the logger stream to produce an effect, for instance logging with the console.
 
-To use the provided console logger (browser only), just add the provider to the platform:
+_To use the provided console logger (browser only), just add the provider to the platform:_
 
 ```typescript
 import {LogLevel, PLATFORM_CONSOLE_LOGGER, RNgPlatformLogger} from "rng-logger";
@@ -69,16 +76,31 @@ platformBrowserDynamic([
 You can supply multiple Handlers via `PLATFORM_INITIALIZER` (by registering at platform creation) or `APP_INITIALIZER` (in App modules).
 Also, creating an instance of the handler in the module instantiation is possible, not recommended tough.
 
-An example function of a log handler is like this:
+_An example function of a log handler is like this:_
 ```typescript
 export function myHttpLogHandler(handler: LogStreamHandler, httpClient: HttpClient) {
   return () => {
     handler.last$()
-      .subscribe(next => {
-        httpClient.post(`/api/log-service/${next.time.getTime()}`, {event: next.message, data: next.options}).subscribe()
-      })
+      .pipe(switchMap(e => {
+        return httpClient.post(`/api/log-service/${e.time.getTime()}`, {event: e.message, data: e.options})
+      }))
+      .subscribe(next => {})
   }
 }
+
+export const MY_HTTP_LOG_HANDLER: StaticProvider = {
+  provide: APP_INITIALIZER,
+  multi: true,
+  useFactory: myHttpLogHandler,
+  deps: [LogStreamHandler, HttpClient]
+};
+
+@NgModule({
+  providers: [
+    MY_HTTP_LOG_HANDLER
+  ]
+})
+export class MyAppModule {}
 ```
 ### Using the logger
 `RNgLogger` can be used via injection or by using the `LoggerFactory`.
@@ -133,6 +155,6 @@ export class MyDirective implements OnInit{
 
 
 ## Known Limitations
-- LoggerFactory cannot be referenced as a static member or constant because the Angular Platform is not available and any call to getPlatform will return null.
+- LoggerFactory cannot be referenced as a static member because the Angular Platform is not available and any call to getPlatform will return null.
     - use `private readonly logger: Logger = LoggerFactory();` and not `private static readonly logger: Logger = LoggerFactory();`
 

@@ -10,6 +10,10 @@
     "test-coverage": "ng test --code-coverage --browsers=ChromeHeadless",
     "publish": "cd dist/rng-logger && npm publish"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yuxblank/RNgLogger.git"
+  },
   "author": "Yuri Blanc",
   "description": "Angular Reactive Logging framework",
   "private": false,

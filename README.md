@@ -3,9 +3,12 @@
 # RNgLogger
 The Reactive Angular Logging framework you wanted!
 
-`RNgLogger` is a logging API that abstract the log stream from the actual log handler, allowing supporting multiple log targets at the same time within your Angular Application.
+`RNgLogger` is a **logging API** that abstract the log stream from the actual log handler, allowing supporting multiple log targets at the same time within your Angular Application.
 
 Easily switch between platforms (browser, server) with different logging handlers using the same API.
+
+This library does not enforce to adhere to any rigid system, you're free to react and interact with logs 
+your way.
 
 Straightforward replace for console usage!
 
@@ -19,6 +22,7 @@ From `console.info("message")` To  `LoggerFactory().info("message")`
 - Angular Platform Logger allow to use the logger interface by Injection and via LoggerFactory() as most of the Logging frameworks
 - No operation Logger (NOP) is provided by default when the logger it's not provided or cannot be resolved. (can be configured to throw error)
 - Logger can be used anywhere, libraries included, and when the application does not register it's just a NOP implementation
+- Straightforward testing
 - A built-in window.console handler for Platform browser apps!
 
 
@@ -163,6 +167,14 @@ export class MyDirective implements OnInit{
 }
 ```
 
+### For libraries creators
+
+When creating a library only want to add RngLoggerModule as an import to use the `Logger` interface.
+It's then the consumer of your library to decide if, when and how to log your library.
+If you provide rng-logger as a logging dependency, make sure your readme contains the link to this documentation to allow the user to configure the logger.
+
+### Versions 
+rng-logger major version follows to the Angular major version, if there's no target for the release just open an issue.
 
 ## Known Limitations
 - LoggerFactory cannot be referenced as a static member because the Angular Platform is not available and any call to getPlatform will return null.

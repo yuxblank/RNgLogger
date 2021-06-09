@@ -2,7 +2,7 @@ import {LoggerOptions, LogLevel, LogStreamHandler, RNG_LOGGER_OPTS} from "./rng-
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {Inject, Injectable} from "@angular/core";
 import {Event} from "./rng-logger-api";
-import {filter, map} from "rxjs/operators";
+import {filter, map, mergeMap} from "rxjs/operators";
 
 @Injectable()
 export class ReactiveLogStreamHandler extends LogStreamHandler{
@@ -26,13 +26,11 @@ export class ReactiveLogStreamHandler extends LogStreamHandler{
 
   last$(level?: LogLevel): Observable<Event> {
     return this.events.pipe(
-      map(e => e.filter(f => {
-        if (level) { return f.level >= level; }
-        else return f.level >= this.opts.level;
-      })),
-      filter(value => value.length > 0),
-      map(value => value[0]),
-      filter(value =>  !!value)
+      mergeMap(e => of(e[0])),
+      filter(f => {
+        const check = level ? level : this.opts.level;
+        return !!f && f.level >= check
+      })
     )
   }
 

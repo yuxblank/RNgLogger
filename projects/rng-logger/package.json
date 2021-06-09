@@ -1,10 +1,10 @@
 {
   "name": "rng-logger",
-  "version": "12.0.1",
+  "version": "12.0.2",
   "author": "Yuri Blanc",
   "description": "Angular Reactive Logging framework",
   "license": "MIT",
-  "keywords": ["angular","angular logger", "angular reactive", "angular logging", "angular console", "angular log", "ngx log", "angular 2 logger"],
+  "keywords": ["angular","angular logger", "angular reactive", "angular logging", "angular console", "angular log", "ngx log", "angular 2 logger", "logging", "angular logging"],
   "peerDependencies": {
     "@angular/common": "^12.0.2",
     "@angular/core": "^12.0.2"

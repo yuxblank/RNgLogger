@@ -3,6 +3,9 @@ import {DEFAULT_OPTIONS, Logger, LoggerOptions, LogLevel, LogStreamHandler, RNG_
 import {ReactiveLogStreamHandler} from "./reactive-log-stream-handler";
 import {RngLogger} from "./rng-logger";
 
+
+let platformLogger: Logger;
+
 export const RNG_LOGGER_PROVIDERS: StaticProvider[] = [
   {provide: LogStreamHandler, useClass: ReactiveLogStreamHandler, deps: [RNG_LOGGER_OPTS]},
   {provide: Logger, useFactory: RNgLoggerFactory, deps: [Injector]},
@@ -51,18 +54,26 @@ export const NOP_LOGGER: NOPLogger = {
 }
 
 
+function getPlatformLogger(){
+  if (!!platformLogger){
+    return platformLogger;
+  }
+  let platform = getPlatform();
+  if (!platform) {
+    return NOP_LOGGER;
+  }
+  return RNgLoggerFactory(platform.injector)
+}
+
+
 export function LoggerFactory(injector?: Injector): Logger | RngLogger {
   if (!injector) {
-    let platform = getPlatform();
-    if (!platform) {
-      return NOP_LOGGER;
-    }
-    return RNgLoggerFactory(platform.injector)
+    return getPlatformLogger();
   }
   return RNgLoggerFactory(injector);
 }
 
-function logLevelAsLcString(level: LogLevel): string {
+export function logLevelAsLcString(level: LogLevel): string {
   switch (level) {
     case LogLevel.INFO: {
       return "info";

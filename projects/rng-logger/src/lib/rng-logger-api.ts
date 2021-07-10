@@ -1,5 +1,6 @@
 import {Observable} from "rxjs";
-import {InjectionToken} from "@angular/core";
+import {getPlatform, Inject, InjectionToken} from "@angular/core";
+import {LoggerFactory, logLevelAsLcString} from "./rng-logger-providers";
 
 export abstract class Logger {
   abstract info(message: string|any, ...options: any[]):void;
@@ -45,4 +46,33 @@ export abstract class LogStreamHandler {
   abstract get$(level?: LogLevel): Observable<Event[]>;
   abstract last$(level?:LogLevel): Observable<Event>;
   abstract clear():void;
+}
+
+export interface LogDecoratorMetadata {
+  level?: LogLevel
+  message?: string;
+}
+
+/**
+ * @Log decorator
+ * @param logMethod
+ * @constructor
+ */
+export const Log = (logMethod?: LogDecoratorMetadata) => (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
+  let original = descriptor.value;
+  descriptor.value = function (...args: any[]) {
+    let loggerFactory = LoggerFactory();
+    let level = LogLevel.DEBUG;
+    if (logMethod && logMethod?.level) {
+      level = logMethod.level
+    }
+    let targetName = "";
+    if (target.constructor){
+      targetName = `${target.constructor.name}::`;
+    }
+    let message = logMethod?.message ? " " +logMethod.message : "";
+    // @ts-ignore
+    loggerFactory[logLevelAsLcString(level)](`${targetName}${propertyKey}${message}`, ...args);
+    original.apply(this, args);
+  }
 }

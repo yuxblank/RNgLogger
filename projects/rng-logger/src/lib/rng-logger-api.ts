@@ -48,15 +48,25 @@ export abstract class LogStreamHandler {
   abstract clear():void;
 }
 
+/**
+ * Log decorators metadata
+ * @see Log
+ */
 export interface LogDecoratorMetadata {
+  /**
+   * Log level to use. Default is DEBUG
+   * @see LogLevel
+   */
   level?: LogLevel
+  /**
+   * a message to apply
+   */
   message?: string;
 }
 
 /**
- * @Log decorator
- * @param logMethod
- * @constructor
+ * @Log decorator for class methods
+ * @param logMethod optional configuration
  */
 export const Log = (logMethod?: LogDecoratorMetadata) => (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
   let original = descriptor.value;

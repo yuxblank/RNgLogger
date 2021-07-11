@@ -21,7 +21,8 @@ From `console.info("message")` To  `LoggerFactory().info("message")`
 - RX.JS based log stream handler allow multiple targets at the same time (console, FileSystem, Http Endpoints etc...)
 - Angular Platform Logger allow to use the logger interface by Injection and via LoggerFactory() as most of the Logging frameworks
 - No operation Logger (NOP) is provided by default when the logger it's not provided or cannot be resolved. (can be configured to throw error)
-- Logger can be used anywhere, libraries included, and when the application does not register it's just a NOP implementation
+- Logger can be used anywhere, **libraries included**, and when the application does not register it's just a NOP implementation
+- Typescript decorators for contextual logging hooks
 - Straightforward testing
 - A built-in window.console handler for Platform browser apps!
 
@@ -166,6 +167,46 @@ export class MyDirective implements OnInit{
   }
 }
 ```
+
+### Using decorators
+
+`RNgLogger` comes with handy decorators to allow your Components or Services methods to being logged when called.
+
+The `@Log` decorator can be applied to class methods, and the log output takes care of including the orignating class, method, arguments and event custom messages.
+
+*Example of using `@Log` in component methods*
+```typescript
+export class MyLoggedComponent implements OnInit{
+  private toggle = false;
+  constructor(){}
+
+  @Log()
+  ngOnInit(): void {}
+
+  @Log({
+    message: "Toggled!",
+    level: LogLevel.INFO
+  })
+  toggle() {
+    this.toggle = !this.toggle;
+  }
+
+  @Log({
+    level: LogLevel.WARN
+  })
+  warning(message: MessageObject, scopes: Scope[]): void {}
+
+}
+```
+These two `@Log` decorated methods will emit logs messages in the format below for the appropriate level:
+```log
+MyLoggedComponent::ngOnInit
+
+MyLoggedComponent::toggle Toggled!
+
+MyLoggedComponent::warning  {...}, [...] // values not represented here
+```
+
 
 ### For libraries creators
 

@@ -1,7 +1,6 @@
-import {LoggerOptions, LogLevel, LogStreamHandler, RNG_LOGGER_OPTS} from "./rng-logger-api";
+import {Event, LoggerOptions, LogLevel, LogStreamHandler, RNG_LOGGER_OPTS} from "./rng-logger-api";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {Inject, Injectable} from "@angular/core";
-import {Event} from "./rng-logger-api";
 import {filter, map, mergeMap} from "rxjs/operators";
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Event, Logger, LogLevel, LogStreamHandler} from "./rng-logger-api";
 
 @Injectable()

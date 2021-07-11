@@ -1,15 +1,5 @@
-import {getTestBed, TestBed} from "@angular/core/testing";
-import {
-  APP_CONSOLE_LOGGER,
-  LoggerFactory,
-  NOPLogger,
-  PLATFORM_CONSOLE_LOGGER,
-  RNgPlatformLogger
-} from "./rng-logger-providers";
-import {RngLogger} from "./rng-logger";
-import {Logger, LogLevel, LogStreamHandler} from "./rng-logger-api";
-import {BrowserDynamicTestingModule, platformBrowserDynamicTesting} from "@angular/platform-browser-dynamic/testing";
-import {Injector, NgModule} from "@angular/core";
+import {TestBed} from "@angular/core/testing";
+import {LoggerFactory, NOPLogger} from "./rng-logger-providers";
 import {RNgLoggerModule} from "./rng-logger.module";
 
 // cannot test due to static nature of TestBed platform

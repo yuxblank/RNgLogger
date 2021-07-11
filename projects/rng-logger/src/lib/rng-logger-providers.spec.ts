@@ -1,4 +1,4 @@
-import {getTestBed, TestBed} from "@angular/core/testing";
+import {TestBed} from "@angular/core/testing";
 import {LoggerFactory, NOP_LOGGER, NOPLogger} from "./rng-logger-providers";
 import {Logger, LogStreamHandler} from "./rng-logger-api";
 import {Injector} from "@angular/core";

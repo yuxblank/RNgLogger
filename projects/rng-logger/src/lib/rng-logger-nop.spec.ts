@@ -1,7 +1,6 @@
 import {TestBed} from "@angular/core/testing";
-import {LoggerFactory, NOPLogger} from "./rng-logger-providers";
+import {LoggerFactory, NOP_LOGGER, NOPLogger} from "./rng-logger-providers";
 import {RNgLoggerModule} from "./rng-logger.module";
-import {NOP_LOGGER} from "rng-logger";
 import {Injector} from "@angular/core";
 import {LogLevel, LogStreamHandler, RNG_LOGGER_OPTS} from "./rng-logger-api";
 

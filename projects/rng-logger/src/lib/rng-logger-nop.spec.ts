@@ -1,27 +1,67 @@
 import {TestBed} from "@angular/core/testing";
 import {LoggerFactory, NOPLogger} from "./rng-logger-providers";
 import {RNgLoggerModule} from "./rng-logger.module";
+import {NOP_LOGGER} from "rng-logger";
+import {Injector} from "@angular/core";
+import {LogLevel, LogStreamHandler, RNG_LOGGER_OPTS} from "./rng-logger-api";
 
-// cannot test due to static nature of TestBed platform
-xdescribe("RngLogger NOP", () => {
-
-  beforeAll(() => {
-    TestBed.resetTestEnvironment();
-  });
-
+describe("RngLogger NOP", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         RNgLoggerModule
-      ]
+      ],
     })
-
+    TestBed.get(LogStreamHandler).clear();
   });
 
-
-  it("should be able to get NOP by LoggerFactory", () => {
-    let factory = LoggerFactory() as NOPLogger;
+  it("Nop logger should be defined", () => {
+    let factory = NOP_LOGGER;
     expect(factory.isNop).toEqual(true);
   })
+
+  it("should be able to call NOP logger impl", () => {
+    let factory = NOP_LOGGER;
+    expect(factory.warn("")).toBeUndefined()
+    expect(factory.trace("")).toBeUndefined()
+    expect(factory.info("")).toBeUndefined()
+    expect(factory.error("")).toBeUndefined()
+    expect(factory.debug("")).toBeUndefined()
+  })
+
+  it("should be able to get NOP logger from factory", () => {
+    let loggerFactory = LoggerFactory(Injector.create({
+      parent: undefined,
+      providers: [
+        {
+          provide: RNG_LOGGER_OPTS, useValue: {
+            maxBuffer: 50,
+            level: LogLevel.ERROR,
+            nonResolvedStrategy: "NOP"
+          }
+        },
+      ]
+    })) as NOPLogger;
+
+    expect(loggerFactory.isNop).toBeTrue();
+  })
+
+  it("should throw if not logger and strategy is not ", () => {
+    expect(() => {
+      LoggerFactory(Injector.create({
+        parent: undefined,
+        providers: [
+          {
+            provide: RNG_LOGGER_OPTS, useValue: {
+              maxBuffer: 50,
+              level: LogLevel.ERROR,
+              nonResolvedStrategy: "ERROR"
+            }
+          },
+        ]
+      })) as NOPLogger;
+    }).toThrow();
+  });
+
 })

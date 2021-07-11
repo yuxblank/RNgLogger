@@ -1,7 +1,8 @@
-import {Log, Logger, LogLevel} from "./rng-logger-api";
+import {Logger, LogLevel} from "./rng-logger-api";
 import {TestBed} from "@angular/core/testing";
 import {RNgLoggerModule} from "./rng-logger.module";
 import {Injectable} from "@angular/core";
+import {Log} from "./rng-logger.decorators";
 
 describe("RngLogger decorators", () => {
 

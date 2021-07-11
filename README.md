@@ -172,7 +172,7 @@ export class MyDirective implements OnInit{
 
 `RNgLogger` comes with handy decorators to allow your Components or Services methods to being logged when called.
 
-The `@Log` decorator can be applied to class methods, and the log output takes care of including the orignating class, method, arguments and event custom messages.
+The `@Log` decorator can be applied to class methods, and the log output takes care of including the originating class, method, arguments and custom message.
 
 *Example of using `@Log` in component methods*
 ```typescript
@@ -198,7 +198,7 @@ export class MyLoggedComponent implements OnInit{
 
 }
 ```
-These two `@Log` decorated methods will emit logs messages in the format below for the appropriate level:
+These `@Log` decorated methods will emit logs messages in the format below for the appropriate level:
 ```log
 MyLoggedComponent::ngOnInit
 
